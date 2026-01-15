@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2196F3">
+    <meta name="description" content="A full-featured browser in your browser">
+    <title>SillyBrowser</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%232196F3' width='192' height='192'/><text x='50%' y='50%' font-size='100' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='central'>SB</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%232196F3' width='192' height='192'/><text x='50%' y='50%' font-size='100' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='central'>SB</text></svg>">
+    <link rel="stylesheet" href="styles. css">
+</head>
+<body>
+    <div class="browser-container">
+        <!-- Top Bar with Tabs -->
+        <div class="tab-bar">
+            <div class="tabs-container" id="tabsContainer"></div>
+            <button class="new-tab-btn" id="newTabBtn" title="New Tab (Ctrl+T)">+</button>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="navbar">
+            <button class="nav-btn" id="backBtn" title="Back (Alt+Left)">←</button>
+            <button class="nav-btn" id="forwardBtn" title="Forward (Alt+Right)">→</button>
+            <button class="nav-btn" id="reloadBtn" title="Reload (Ctrl+R)">⟳</button>
+            <button class="nav-btn" id="stopBtn" title="Stop Loading">⊗</button>
+            
+            <div class="address-bar">
+                <input 
+                    type="text" 
+                    id="addressInput" 
+                    class="address-input" 
+                    placeholder="Enter URL or search..." 
+                    autocomplete="off"
+                >
+                <button class="favorite-btn" id="favoriteBtn" title="Add to Favorites">☆</button>
+            </div>
+
+            <button class="nav-btn" id="settingsBtn" title="Settings">⚙</button>
+            <button class="nav-btn" id="devToolsBtn" title="Developer Tools (F12)">⌨</button>
+            <button class="nav-btn" id="installBtn" title="Install App" style="display: none;">⬇</button>
+        </div>
+
+        <!-- Bookmarks Bar -->
+        <div class="bookmarks-bar" id="bookmarksBar"></div>
+
+        <!-- Main Content Area -->
+        <div class="browser-content">
+            <div id="browserView" class="browser-view"></div>
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+
+        <!-- Developer Tools -->
+        <div class="devtools-panel" id="devtoolsPanel">
+            <div class="devtools-header">
+                <span>Developer Tools</span>
+                <button class="close-devtools" id="closeDevtools">✕</button>
+            </div>
+            <div class="devtools-tabs">
+                <button class="devtools-tab active" data-tab="console">Console</button>
+                <button class="devtools-tab" data-tab="network">Network</button>
+                <button class="devtools-tab" data-tab="storage">Storage</button>
+            </div>
+            <div class="devtools-content">
+                <div class="devtools-tab-content active" id="consoleTab">
+                    <div class="console-output" id="consoleOutput"></div>
+                    <input type="text" id="consoleInput" placeholder="Type JavaScript code..." class="console-input">
+                </div>
+                <div class="devtools-tab-content" id="networkTab">
+                    <div class="network-log" id="networkLog"></div>
+                </div>
+                <div class="devtools-tab-content" id="storageTab">
+                    <div class="storage-display" id="storageDisplay"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settingsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <button class="modal-close" id="closeSettings">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-group">
+                        <label for="homepageInput">Homepage: </label>
+                        <input type="text" id="homepageInput" placeholder="https://example.com">
+                    </div>
+                    <div class="setting-group">
+                        <label for="searchEngineSelect">Search Engine:</label>
+                        <select id="searchEngineSelect">
+                            <option value="google">Google</option>
+                            <option value="bing">Bing</option>
+                            <option value="duckduckgo">DuckDuckGo</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label>
+                            <input type="checkbox" id="enableJsCheckbox" checked>
+                            Enable JavaScript
+                        </label>
+                    </div>
+                    <div class="setting-group">
+                        <label>
+                            <input type="checkbox" id="enableCookiesCheckbox" checked>
+                            Enable Cookies
+                        </label>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-secondary" id="clearHistoryBtn">Clear History</button>
+                        <button class="btn btn-secondary" id="clearCacheBtn">Clear Cache</button>
+                        <button class="btn btn-secondary" id="clearCookiesBtn">Clear Cookies</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Sidebar -->
+        <div class="sidebar history-sidebar" id="historySidebar">
+            <div class="sidebar-header">
+                <h3>History</h3>
+                <button class="sidebar-close" id="closeHistorySidebar">✕</button>
+            </div>
+            <input type="text" class="sidebar-search" id="historySearch" placeholder="Search history...">
+            <div class="sidebar-content" id="historyContent"></div>
+        </div>
+
+        <!-- Bookmarks Sidebar -->
+        <div class="sidebar bookmarks-sidebar" id="bookmarksSidebar">
+            <div class="sidebar-header">
+                <h3>Bookmarks</h3>
+                <button class="sidebar-close" id="closeBookmarksSidebar">✕</button>
+            </div>
+            <input type="text" class="sidebar-search" id="bookmarksSearch" placeholder="Search bookmarks...">
+            <div class="sidebar-content" id="bookmarksContent"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
